@@ -125,6 +125,48 @@ function start () {
     chestbrightness = 50
     Genroom001()
 }
+function newroom () {
+    if (crntwrld == 1) {
+        if (plraxis == 1) {
+        	
+        } else if (plraxis == 2) {
+            plrposx = plrposx - 5
+            Genroom002()
+        } else if (plraxis == 3) {
+        	
+        } else if (plraxis == 4) {
+        	
+        }
+    } else if (crntwrld == 2) {
+        if (plraxis == 1) {
+            plrposx = plrposx + 5
+            Genroom001()
+        } else if (plraxis == 2) {
+        	
+        } else if (plraxis == 3) {
+            if (invkey == 2) {
+                plrposy = plrposy + 5
+                Genroom0032()
+            } else {
+                plrposy = plrposy + 5
+                Genroom0031()
+            }
+        } else if (plraxis == 4) {
+        	
+        }
+    } else if (crntwrld == 3) {
+        if (plraxis == 1) {
+        	
+        } else if (plraxis == 2) {
+        	
+        } else if (plraxis == 3) {
+        	
+        } else if (plraxis == 4) {
+            plrposy = plrposy - 5
+            Genroom002()
+        }
+    }
+}
 function Genroom0031 () {
     crntwrld = 3
     basic.showLeds(`
@@ -173,7 +215,7 @@ basic.forever(function () {
         }
     }
 })
-basic.forever(function () {
+loops.everyInterval(200, function () {
     if (plrposx > 4 || plrposx < 0) {
         edge = plrposx - 10
         if (edge == -5) {
@@ -181,9 +223,7 @@ basic.forever(function () {
         } else if (edge == -11) {
             plraxis = 1
         }
-        basic.showNumber(plraxis)
-        basic.clearScreen()
-        genwrld(crntwrld)
+        newroom()
     } else if (plrposy > 4 || plrposy < 0) {
         edge = plrposy + 10
         if (edge == 15) {
@@ -191,9 +231,7 @@ basic.forever(function () {
         } else if (edge == 9) {
             plraxis = 3
         }
-        basic.showNumber(plraxis)
-        basic.clearScreen()
-        genwrld(crntwrld)
+        newroom()
     }
 })
 loops.everyInterval(100, function () {
@@ -217,25 +255,5 @@ loops.everyInterval(100, function () {
             plrposx = 2
             genwrld(crntwrld)
         }
-    }
-})
-loops.everyInterval(100, function () {
-    if (crntwrld == 1 && plrposx > 4) {
-        plrposx = plrposx - 5
-        Genroom002()
-    } else if (crntwrld == 2 && plrposx < 0) {
-        plrposx = plrposx + 5
-        Genroom001()
-    } else if (crntwrld == 2 && plrposy < 0) {
-        if (invkey == 2) {
-            plrposy = plrposy + 5
-            Genroom0032()
-        } else {
-            plrposy = plrposy + 5
-            Genroom0031()
-        }
-    } else if (crntwrld == 3 && plrposy > 4) {
-        plrposy = plrposy - 5
-        Genroom002()
     }
 })
