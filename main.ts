@@ -146,6 +146,7 @@ function Edge (mvx: number, mvy: number) {
         edge = 0
     }
 }
+let plraxis = 0
 let cheststorage = 0
 let chestbrightness = 0
 let invkey = 0
@@ -170,6 +171,29 @@ basic.forever(function () {
             basic.showString("HAH, rot in jail")
             start()
         }
+    }
+})
+basic.forever(function () {
+    if (plrposx > 4 || plrposx < 0) {
+        edge = plrposx - 10
+        if (edge == -5) {
+            plraxis = 2
+        } else if (edge == -11) {
+            plraxis = 1
+        }
+        basic.showNumber(plraxis)
+        basic.clearScreen()
+        genwrld(crntwrld)
+    } else if (plrposy > 4 || plrposy < 0) {
+        edge = plrposy + 10
+        if (edge == 15) {
+            plraxis = 4
+        } else if (edge == 9) {
+            plraxis = 3
+        }
+        basic.showNumber(plraxis)
+        basic.clearScreen()
+        genwrld(crntwrld)
     }
 })
 loops.everyInterval(100, function () {
