@@ -51,7 +51,7 @@ function Jail () {
 }
 function plrmv (mvf: number, plraxis: number) {
     if (plraxis == 2) {
-        Edge(mvf, 0)
+        Edge(0, mvf)
         if (edge == 0) {
             led.unplot(plrposx, plrposy)
             plrposy = plrposy + mvf
@@ -60,7 +60,7 @@ function plrmv (mvf: number, plraxis: number) {
         	
         }
     } else if (plraxis == 1) {
-        Edge(0, mvf)
+        Edge(mvf, 0)
         if (edge == 0) {
             led.unplot(plrposx, plrposy)
             plrposx = plrposx + mvf
@@ -200,22 +200,7 @@ let plrbirghtness = 0
 let plrposy = 0
 let plrposx = 0
 start()
-basic.forever(function () {
-    if (crntwrld == 3) {
-        if ((plrposx == 2 || plrposx == 3) && plrposy == -1) {
-            basic.clearScreen()
-            basic.showString("GOOD JOB!")
-            basic.pause(1000)
-            start()
-        } else if ((plrposx == 1 || (plrposx == 2 || plrposx == 3)) && plrposy < -4) {
-            Jail()
-            basic.pause(8000)
-            basic.showString("HAH, rot in jail")
-            start()
-        }
-    }
-})
-loops.everyInterval(200, function () {
+loops.everyInterval(100, function () {
     if (plrposx > 4 || plrposx < 0) {
         edge = plrposx - 10
         if (edge == -5) {
@@ -233,8 +218,6 @@ loops.everyInterval(200, function () {
         }
         newroom()
     }
-})
-loops.everyInterval(100, function () {
     if (plrposy == eventtriggy && plrposx == eventtriggx) {
         basic.clearScreen()
         if (crntwrld == 3) {
@@ -254,6 +237,19 @@ loops.everyInterval(100, function () {
             basic.pause(100)
             plrposx = 2
             genwrld(crntwrld)
+        }
+    }
+    if (crntwrld == 3) {
+        if ((plrposx == 2 || plrposx == 3) && plrposy == -1) {
+            basic.clearScreen()
+            basic.showString("GOOD JOB!")
+            basic.pause(1000)
+            start()
+        } else if ((plrposx == 1 || (plrposx == 2 || plrposx == 3)) && plrposy < -4) {
+            Jail()
+            basic.pause(8000)
+            basic.showString("HAH, rot in jail")
+            start()
         }
     }
 })
