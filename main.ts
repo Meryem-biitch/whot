@@ -1,10 +1,8 @@
-function genwrld (crntwrld: number) {
-    if (crntwrld == 1) {
-        Genroom001()
-    } else if (crntwrld == 2) {
-        Genroom002()
-    } else if (crntwrld == 3) {
-        Genroom0031()
+function collision (mvx: number, mvy: number) {
+    if (led.pointBrightness(plrposx + mvx, plrposy + mvy) > plrbirghtness) {
+        edge = 1
+    } else if (led.pointBrightness(0 + mvx, plrposy + mvy) < plrbirghtness) {
+        edge = 0
     }
 }
 function plrspawn (plrx: number, plry: number) {
@@ -12,77 +10,42 @@ function plrspawn (plrx: number, plry: number) {
     plrposy = plry
     led.plotBrightness(plrposx, plrposy, plrbirghtness)
 }
-input.onButtonPressed(Button.A, function () {
-    plrmv(-1, 1)
-})
-function Genroom0032 () {
-    crntwrld = 3
-    basic.showLeds(`
-        # . . . #
-        # . . . #
-        # . . . #
-        # . . . #
-        # . . . #
-        `)
-    plrspawn(plrposx, plrposy)
-}
-function genroom004 () {
-    crntwrld = 4
-    basic.showLeds(`
-        # . . . #
-        # . . . .
-        # . . . .
-        # . . . .
-        # . . . #
-        `)
-    plrspawn(plrposx, plrposy)
-}
-function Jail () {
-    crntwrld = 0
-    basic.clearScreen()
-    basic.showLeds(`
-        # # # # #
-        # . . . #
-        # . . . #
-        # . . . #
-        # # # # #
-        `)
-    plrspawn(2, 2)
-}
-function plrmv (mvf: number, plraxis: number) {
+function plrmv2 (mvf: number, plraxis: number) {
     if (plraxis == 2) {
-        Edge(0, mvf)
+        collision(0, mvf)
         if (edge == 0) {
             led.unplot(plrposx, plrposy)
             plrposy = plrposy + mvf
             led.plotBrightness(plrposx, plrposy, plrbirghtness)
-        } else if (edge == 1) {
-        	
         }
     } else if (plraxis == 1) {
-        Edge(mvf, 0)
+        collision(mvf, 0)
         if (edge == 0) {
             led.unplot(plrposx, plrposy)
             plrposx = plrposx + mvf
             led.plotBrightness(plrposx, plrposy, plrbirghtness)
-        } else if (edge == 1) {
-        	
         }
     }
 }
-function Genroom002 () {
-    crntwrld = 2
-    basic.showLeds(`
-        # . . . #
-        . . . . #
-        . . . . #
-        . . . . #
-        # # # # #
-        `)
-    plrspawn(plrposx, plrposy)
-    eventtriggx = 3
-    eventtriggy = 3
-    genchest(3, 3, 1)
+input.onButtonPressed(Button.A, function () {
+    plrmv(-1, 1)
+})
+function plrmv (mvf: number, plraxis: number) {
+    if (plraxis == 2) {
+        collision(0, mvf)
+        if (edge == 0) {
+            led.unplot(plrposx, plrposy)
+            plrposy = plrposy + mvf
+            led.plotBrightness(plrposx, plrposy, plrbirghtness)
+        }
+    } else if (plraxis == 1) {
+        collision(mvf, 0)
+        if (edge == 0) {
+            led.unplot(plrposx, plrposy)
+            plrposx = plrposx + mvf
+            led.plotBrightness(plrposx, plrposy, plrbirghtness)
+        }
+    }
 }
 input.onButtonPressed(Button.AB, function () {
     plrmv(1, 2)
@@ -93,163 +56,198 @@ input.onButtonPressed(Button.B, function () {
 input.onGesture(Gesture.Shake, function () {
     invkey = 2
 })
-function genchest (_1x: number, _1y: number, storage: number) {
-    led.plotBrightness(_1x, _1y, chestbrightness)
-    if (storage == 1) {
-        cheststorage = 1
-    } else {
-        cheststorage = 0
+function grid () {
+    if (plrposx > 4) {
+        wordcoord += 1
+        Room_spawn(wordcoord, 0, plrposy)
+    } else if (plrposx < 0) {
+        wordcoord += -1
+        Room_spawn(wordcoord, 4, plrposy)
+    } else if (plrposy > 4) {
+        wordcoord += 10
+        Room_spawn(wordcoord, plrposx, 0)
+    } else if (plrposy < 0) {
+        wordcoord += -10
+        Room_spawn(wordcoord, plrposx, 4)
     }
 }
 input.onLogoEvent(TouchButtonEvent.Pressed, function () {
     plrmv(-1, 2)
 })
-function Genroom001 () {
-    crntwrld = 1
-    basic.showLeds(`
-        # # # # #
-        # . . . .
-        # . . . .
-        # . . . .
-        # # # # #
-        `)
-    plrspawn(2, 2)
+function Room_spawn (wrldcoord: number, plsposx: number, plrposy: number) {
+    basic.clearScreen()
+    if (wrldcoord == 35) {
+        basic.showLeds(`
+            # # # # #
+            # . . . #
+            # . . . #
+            # . . . #
+            # . . . #
+            `)
+    } else if (wrldcoord == 44) {
+        basic.showLeds(`
+            # # # # #
+            # . . . .
+            # . . . .
+            # . . . .
+            # # # # #
+            `)
+    } else if (wrldcoord == 45) {
+        basic.showLeds(`
+            # . . . #
+            . . . . #
+            . . . . .
+            . . . . #
+            # # . # #
+            `)
+    } else if (wrldcoord == 46) {
+        basic.showLeds(`
+            # # # # #
+            # . . . #
+            . . . . #
+            # . . . #
+            # # # # #
+            `)
+    } else if (wrldcoord == 53) {
+        basic.showLeds(`
+            # # # # #
+            # . . . .
+            # . . . .
+            # . . . .
+            # # # # #
+            `)
+    } else if (wrldcoord == 54) {
+        basic.showLeds(`
+            # # # # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # # # #
+            `)
+    } else if (wrldcoord == 55) {
+        basic.showLeds(`
+            # # . # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # . # #
+            `)
+    } else if (wrldcoord == 56) {
+        basic.showLeds(`
+            # # # # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # # # #
+            `)
+    } else if (wrldcoord == 57) {
+        basic.showLeds(`
+            # # # # #
+            . . . . #
+            . . . . #
+            . . . . #
+            # # # # #
+            `)
+    } else if (wrldcoord == 64) {
+        basic.showLeds(`
+            # # # # #
+            # . . . #
+            # . . . .
+            # . . . #
+            # # # # #
+            `)
+    } else if (wrldcoord == 65) {
+        basic.showLeds(`
+            # # . # #
+            # . . . #
+            . . . . .
+            # . . . #
+            # . . . #
+            `)
+    } else if (wrldcoord == 66) {
+        basic.showLeds(`
+            # # # # #
+            # . . . #
+            . . . . #
+            # . . . #
+            # # # # #
+            `)
+    } else if (wrldcoord == 75) {
+        basic.showLeds(`
+            # . . . #
+            # . . . #
+            # . . . #
+            # . . . #
+            # # # # #
+            `)
+        led.plotBrightness(0, 2, plrbirghtness - 1)
+    } else if (wrldcoord == 0) {
+        basic.showLeds(`
+            # . . # .
+            . # . # .
+            . . # . .
+            # # . . .
+            . . . . .
+            `)
+    } else if (wrldcoord == -1) {
+        basic.showLeds(`
+            . # . . .
+            . # . . .
+            . . # . .
+            . . . # #
+            . . . . .
+            `)
+    } else if (wrldcoord == -10) {
+        basic.showLeds(`
+            . . . . .
+            # # . . .
+            . . # . .
+            . . . # .
+            . . . # .
+            `)
+    } else if (wrldcoord == -11) {
+        basic.showLeds(`
+            . . . . .
+            . . . # #
+            . . # . .
+            . # . # .
+            . # . . #
+            `)
+    } else if (wrldcoord == 69) {
+        basic.clearScreen()
+        basic.showString("69. nice.")
+        start()
+    } else if (wrldcoord == -69) {
+        basic.clearScreen()
+        basic.showString("dayum, dedication!")
+        basic.pause(500)
+        basic.showString("69. nice.")
+        start()
+    } else {
+        basic.showLeds(`
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            . . . . .
+            `)
+    }
+    plrspawn(plsposx, plrposy)
 }
 function start () {
-    invkey = 0
-    eventtriggx = 0
-    eventtriggy = 0
+    wordcoord = 44
     plrbirghtness = 150
     plrposx = 2
     plrposy = 2
-    chestbrightness = 50
-    Genroom001()
+    Room_spawn(wordcoord, plrposx, plrposy)
 }
-function newroom () {
-    if (crntwrld == 1) {
-        if (plraxis == 1) {
-        	
-        } else if (plraxis == 2) {
-            plrposx = plrposx - 5
-            Genroom002()
-        } else if (plraxis == 3) {
-        	
-        } else if (plraxis == 4) {
-        	
-        }
-    } else if (crntwrld == 2) {
-        if (plraxis == 1) {
-            plrposx = plrposx + 5
-            Genroom001()
-        } else if (plraxis == 2) {
-        	
-        } else if (plraxis == 3) {
-            if (invkey == 2) {
-                plrposy = plrposy + 5
-                Genroom0032()
-            } else {
-                plrposy = plrposy + 5
-                Genroom0031()
-            }
-        } else if (plraxis == 4) {
-        	
-        }
-    } else if (crntwrld == 3) {
-        if (plraxis == 1) {
-        	
-        } else if (plraxis == 2) {
-        	
-        } else if (plraxis == 3) {
-        	
-        } else if (plraxis == 4) {
-            plrposy = plrposy - 5
-            Genroom002()
-        }
-    }
-}
-function Genroom0031 () {
-    crntwrld = 3
-    basic.showLeds(`
-        # # # # #
-        # . . . #
-        # . . . #
-        # . . . #
-        # . . . #
-        `)
-    plrspawn(plrposx, plrposy)
-    eventtriggx = 1
-    eventtriggy = 2
-    genchest(1, 2, 1)
-}
-function Edge (mvx: number, mvy: number) {
-    if (led.pointBrightness(plrposx + mvx, plrposy + mvy) > plrbirghtness) {
-        edge = 1
-    } else if (led.pointBrightness(plrposx + mvx, plrposy + mvy) < plrbirghtness) {
-        edge = 0
-    }
-}
-let plraxis = 0
-let cheststorage = 0
-let chestbrightness = 0
+let wordcoord = 0
 let invkey = 0
-let eventtriggy = 0
-let eventtriggx = 0
 let edge = 0
-let crntwrld = 0
 let plrbirghtness = 0
 let plrposy = 0
 let plrposx = 0
 start()
-loops.everyInterval(100, function () {
-    if (plrposx > 4 || plrposx < 0) {
-        edge = plrposx - 10
-        if (edge == -5) {
-            plraxis = 2
-        } else if (edge == -11) {
-            plraxis = 1
-        }
-        newroom()
-    } else if (plrposy > 4 || plrposy < 0) {
-        edge = plrposy + 10
-        if (edge == 15) {
-            plraxis = 4
-        } else if (edge == 9) {
-            plraxis = 3
-        }
-        newroom()
-    }
-    if (plrposy == eventtriggy && plrposx == eventtriggx) {
-        basic.clearScreen()
-        if (crntwrld == 3) {
-            basic.showString("KEY1")
-            basic.pause(100)
-            plrposx = 2
-            genwrld(crntwrld)
-            invkey = 1
-            cheststorage = 0
-        } else if (crntwrld == 2) {
-            if (invkey == 1) {
-                basic.showString("OPEN")
-                invkey = 2
-            } else {
-                basic.showString("LOCKED")
-            }
-            basic.pause(100)
-            plrposx = 2
-            genwrld(crntwrld)
-        }
-    }
-    if (crntwrld == 3) {
-        if ((plrposx == 2 || plrposx == 3) && plrposy == -1) {
-            basic.clearScreen()
-            basic.showString("GOOD JOB!")
-            basic.pause(1000)
-            start()
-        } else if ((plrposx == 1 || (plrposx == 2 || plrposx == 3)) && plrposy < -4) {
-            Jail()
-            basic.pause(8000)
-            basic.showString("HAH, rot in jail")
-            start()
-        }
-    }
+basic.forever(function () {
+    grid()
 })
